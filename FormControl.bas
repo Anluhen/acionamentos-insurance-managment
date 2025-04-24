@@ -302,8 +302,8 @@ Sub EnviarParaAprovação(Optional ShowOnMacroList As Boolean = False)
         Exit Sub
     End If
     
-    If foundRow.Cells(1, colMap("Data da Solicitação")).Value <> "" Then
-        userResponse = MsgBox("O e-mail de aprovação para esses dados já foi enviado em " & foundRow.Cells(1, colMap("Data da Solicitação")).Value & ". Deseja enviar novamente?", vbYesNo)
+    If foundRow.Cells(1, colMap("Solicitação")).Value <> "" Then
+        userResponse = MsgBox("O e-mail de aprovação para esses dados já foi enviado em " & foundRow.Cells(1, colMap("Solicitação")).Value & ". Deseja enviar novamente?", vbYesNo)
         If userResponse = vbNo Then
             MsgBox "Envio de e-mail cancelado!", vbInformation
             Exit Sub
@@ -324,97 +324,57 @@ Sub EnviarParaAprovação(Optional ShowOnMacroList As Boolean = False)
     End With
     
     HTMLbody = ""
-    HTMLbody = HTMLbody & "<p>" & greeting & ", Moretti</p>"
-    HTMLbody = HTMLbody & "<p>Solicito sua confirmação (“De acordo”) quanto aos valores abaixo, para que possamos dar continuidade à contratação da " & _
-        foundRow.Cells(1, colMap("Prestador de Serviço (Quem executou)")).Value & " para o serviço descrito a seguir: " & foundRow.Cells(1, colMap("Descrição Breve do Aditivo")).Value & " da " & foundRow.Cells(1, colMap("Nome da Obra")).Value & _
-        " no valor de " & Format(foundRow.Cells(1, colMap("Valor MDS")).Value, "R$ #,##0.00") & ". Todos os valores apresentados abaixo foram analisados pela equipe de Implantação/Suprimentos e considerado procedentes." & "</p>"
+    HTMLbody = HTMLbody & "<p>" & greeting & ", Prezada</p>"
+    HTMLbody = HTMLbody & "<p>Gentileza prosseguir com a solicitação de seguro conforme dados abaixo:</p>"
     
-    ' Start the table
+    ' First header row
     HTMLbody = HTMLbody & "<table border='1' style='border-collapse: collapse; font-size: 10pt;'>"
-    
-    ' Title row
-    HTMLbody = HTMLbody & "<tr style='background-color:#d9d9d9;'>"
-    HTMLbody = HTMLbody & "<td colspan='2'><b>Provisão de Riscos" & " - " & foundRow.Cells(1, colMap("Nome da Obra")).Value & " - " & foundRow.Cells(1, colMap("Cliente")).Value & "</b></td>"
-    HTMLbody = HTMLbody & "</tr>"
-    
-    ' 1) VALOR MDS
     HTMLbody = HTMLbody & "<tr>"
-    HTMLbody = HTMLbody & "<td><b>VALOR MDS</b></td>"
-    ' Example: reading from the "Dados" sheet. Adjust the range as needed.
-    HTMLbody = HTMLbody & "<td>" & Format(foundRow.Cells(1, colMap("Valor MDS")).Value, "R$ #,##0.00") & " - que representa " & Format(foundRow.Cells(1, colMap("Impacto no COT")).Value, "#0.00%") & " do Custo Atual disponível na Provisão de Riscos</td>"
+    HTMLbody = HTMLbody & "<th scope=""col"" colspan=""4"">NOME DO PROJETO</th>"
+    HTMLbody = HTMLbody & "<th scope=""col"" colspan=""3"">VALOR TOTAL</th>"
+    
+    ' Close first header row
     HTMLbody = HTMLbody & "</tr>"
     
-    ' 2) CUSTO COT DO DR
+    ' Data row
     HTMLbody = HTMLbody & "<tr>"
-    HTMLbody = HTMLbody & "<td><b>VALOR ORIGINAL DO DR (COT)</b></td>"
-    HTMLbody = HTMLbody & "<td>" & Format(foundRow.Cells(1, colMap("Custo COT")).Value, "R$ #,##0.00") & "</td>"
+    HTMLbody = HTMLbody & "<td scope=""col"" colspan=""4"">" & foundRow.Cells(1, colMap("Projeto")).Value & "</td>"
+    HTMLbody = HTMLbody & "<td scope=""col"" colspan=""3"">" & Format(foundRow.Cells(1, colMap("Valor Total")).Value, "R$ 0.00") & "</td>"
     HTMLbody = HTMLbody & "</tr>"
     
-    ' 3) CUSTO ATUAL DISPONÍVEL DO DR
+    ' Second header row
     HTMLbody = HTMLbody & "<tr>"
-    HTMLbody = HTMLbody & "<td><b>SALDO ATUAL DO DR</b></td>"
-    HTMLbody = HTMLbody & "<td>" & Format(foundRow.Cells(1, colMap("Custo Atual Disponível")).Value, "R$ #,##0.00") & "</td>"
+    HTMLbody = HTMLbody & "<th scope=""col"">Garantia</th>"
+    HTMLbody = HTMLbody & "<th scope=""col"">PEP</th>"
+    HTMLbody = HTMLbody & "<th scope=""col"">%</th>"
+    HTMLbody = HTMLbody & "<th scope=""col"">Valor</th>"
+    HTMLbody = HTMLbody & "<th scope=""col"">Início da Vigência</th>"
+    HTMLbody = HTMLbody & "<th scope=""col"">Final da Vigência</th>"
+    HTMLbody = HTMLbody & "<th scope=""col"">ID</th>"
     HTMLbody = HTMLbody & "</tr>"
     
-    ' 4) SALDO RESIDUAL DO DR
+    ' Data row
     HTMLbody = HTMLbody & "<tr>"
-    HTMLbody = HTMLbody & "<td><b>SALDO RESIDUAL DO DR APÓS MDS</b></td>"
-    HTMLbody = HTMLbody & "<td>" & Format(foundRow.Cells(1, colMap("Saldo Residual")).Value, "R$ #,##0.00") & "</td>"
+    HTMLbody = HTMLbody & "<td>" & foundRow.Cells(1, colMap("Tipo")).Value & "</td>"
+    HTMLbody = HTMLbody & "<td>" & foundRow.Cells(1, colMap("PEP")).Value & "</td>"
+    HTMLbody = HTMLbody & "<td>" & Format(foundRow.Cells(1, colMap("Percentual")).Value, "0.00%") & "</td>"
+    HTMLbody = HTMLbody & "<td>" & Format(foundRow.Cells(1, colMap("Apolice")).Value, "R$ 0.00") & "</td>"
+    HTMLbody = HTMLbody & "<td>" & foundRow.Cells(1, colMap("Inicio Vigencia")).Value & "</td>"
+    HTMLbody = HTMLbody & "<td>" & foundRow.Cells(1, colMap("Fim Vigencia")).Value & "</td>"
+    HTMLbody = HTMLbody & "<td>" & foundRow.Cells(1, colMap("ID")).Value & "</td>"
     HTMLbody = HTMLbody & "</tr>"
     
-    ' 5) Inserido no DR/tarefa
-    HTMLbody = HTMLbody & "<tr>"
-    HTMLbody = HTMLbody & "<td><b>INSERIDO NO DR/TAREFA:</b></td>"
-    HTMLbody = HTMLbody & "<td>" & foundRow.Cells(1, colMap("DR Atividade")).Value & "</td>"
-    HTMLbody = HTMLbody & "</tr>"
-    
-    ' 6) Justificativa
-    HTMLbody = HTMLbody & "<tr>"
-    HTMLbody = HTMLbody & "<td><b>JUSTIFICATIVA:</b></td>"
-    HTMLbody = HTMLbody & "<td>" & foundRow.Cells(1, colMap("Justificativa do Aditivo")).Value & "</td>"
-    HTMLbody = HTMLbody & "</tr>"
-    
-    ' 7) Outros riscos já mapeados
-    HTMLbody = HTMLbody & "<tr>"
-    HTMLbody = HTMLbody & "<td><b>OUTROS RISCOS JÁ MAPEADOS:</b></td>"
-    HTMLbody = HTMLbody & "<td>" & foundRow.Cells(1, colMap("Outros Riscos")).Value & "</td>"
-    HTMLbody = HTMLbody & "</tr>"
-    
-    ' 8) Estágio da Obra
-    HTMLbody = HTMLbody & "<tr>"
-    HTMLbody = HTMLbody & "<td><b>ESTÁGIO DA OBRA:</b></td>"
-    
-    If IsNumeric(foundRow.Cells(1, colMap("Estágio da Obra")).Value) Then
-        If foundRow.Cells(1, colMap("Estágio da Obra")).Value < 0.4 Then
-            HTMLbody = HTMLbody & "<td>" & Format(foundRow.Cells(1, colMap("Estágio da Obra")).Value, "##.00%") & " (Fase Inicial)" & "</td>"
-        ElseIf foundRow.Cells(1, colMap("Estágio da Obra")).Value < 0.8 Then
-            HTMLbody = HTMLbody & "<td>" & Format(foundRow.Cells(1, colMap("Estágio da Obra")).Value, "##.00%") & " (Fase Intermediária)" & "</td>"
-        Else
-            HTMLbody = HTMLbody & "<td>" & Format(foundRow.Cells(1, colMap("Estágio da Obra")).Value, "##.00%") & " (Fase Final)" & "</td>"
-        End If
-    Else
-        HTMLbody = HTMLbody & "<td>" & foundRow.Cells(1, colMap("Estágio da Obra")).Value & "</td>"
-    End If
-
-    HTMLbody = HTMLbody & "</tr>"
-    
-    ' 9) Ação necessária
-    HTMLbody = HTMLbody & "<tr>"
-    HTMLbody = HTMLbody & "<td><b>AÇÃO NECESSÁRIA:</b></td>"
-    HTMLbody = HTMLbody & "<td>" & foundRow.Cells(1, colMap("Detalhamento do Fator Motivador")).Value & "</td>"
-    HTMLbody = HTMLbody & "</tr>"
-    
-    ' Close the table
+    ' Close TABLE
     HTMLbody = HTMLbody & "</table>"
     
     '-------------------------------------------------------------------------
     ' Configure and send the email
     '-------------------------------------------------------------------------
     With OutMail
-        .To = "emoretti@weg.net"
-        .CC = "matheusp@weg.net"
+        .To = "julianarigo@weg.net"
+        .CC = ""
         .BCC = ""
-        .Subject = "Aprovação de Custos - Provisão de Riscos - " & foundRow.Cells(1, colMap("Nome da Obra")).Value & " - " & foundRow.Cells(1, colMap("Cliente")).Value
+        .Subject = "Solicitação de Seguro - " & foundRow.Cells(1, colMap("Projeto")).Value & " - " & foundRow.Cells(1, colMap("Cliente")).Value & " - " & foundRow.Cells(1, colMap("PEP")).Value
         .HTMLbody = HTMLbody & strSignature
         .Display   'Use .Display to just open the email draft
         ' .Send       'Use .Send to send immediately
@@ -424,9 +384,9 @@ Sub EnviarParaAprovação(Optional ShowOnMacroList As Boolean = False)
     Set OutMail = Nothing
     Set OutApp = Nothing
     
-    foundRow.Cells(1, colMap("Data da Solicitação")).Value = Date
+    foundRow.Cells(1, colMap("Solicitação")).Value = Date
     
-    MsgBox "Email """ & "Aprovação de Custos - Provisão de Riscos - " & foundRow.Cells(1, colMap("Nome da Obra")).Value & " - " & foundRow.Cells(1, colMap("Cliente")).Value & """ enviado com sucesso!", vbInformation
+    MsgBox "Email """ & "Solicitação de Seguro - " & foundRow.Cells(1, colMap("Projeto")).Value & " - " & foundRow.Cells(1, colMap("Cliente")).Value & " - " & foundRow.Cells(1, colMap("PEP")).Value & """ enviado com sucesso!", vbInformation
     
 End Sub
 
@@ -490,7 +450,7 @@ Public Function GetColumnHeadersMapping() As Object
     headers.Add "Inicio Vigencia", 11
     headers.Add "Fim Vigencia", 12
     headers.Add "Status", 13
-    headers.Add "Solicitaï¿½ï¿½o", 14
+    headers.Add "Solicitação", 14
     
     Set GetColumnHeadersMapping = headers
 End Function
