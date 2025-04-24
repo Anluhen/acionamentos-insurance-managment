@@ -67,9 +67,10 @@ Sub SaveData(Optional ShowOnMacroList As Boolean = False)
         .Cells(1, colMap("ID")).Value = newID ' First column value
         
         ' Read column B values
-        .Cells(1, colMap("Cliente")).Value = wsForm.Range("B6").Value
-        .Cells(1, colMap("PM")).Value = wsForm.Range("B10").Value
-        .Cells(1, colMap("PEP")).Value = wsForm.Range("B14").Value
+        .Cells(1, colMap("Projeto")).Value = wsForm.Range("B6").Value
+        .Cells(1, colMap("Cliente")).Value = wsForm.Range("B10").Value
+        .Cells(1, colMap("PM")).Value = wsForm.Range("B14").Value
+        .Cells(1, colMap("PEP")).Value = wsForm.Range("B18").Value
         
         ' Read column D values
         .Cells(1, colMap("Tipo")).Value = wsForm.Range("D6").Value
@@ -144,9 +145,10 @@ Sub RetrieveDataFromName(Optional ShowOnMacroList As Boolean = False)
         wsForm.OLEObjects("ComboBoxName").Object.Value = foundRow.Cells(1, colMap("ID")) & " - " & foundRow.Cells(1, colMap("PEP")) & " - " & foundRow.Cells(1, colMap("Cliente")) & " - " & foundRow.Cells(1, colMap("Tipo"))
         
         ' Read column B values
-        .Range("B6").Value = foundRow.Cells(1, colMap("Cliente")).Value
-        .Range("B10").Value = foundRow.Cells(1, colMap("PM")).Value
-        .Range("B14").Value = foundRow.Cells(1, colMap("PEP")).Value
+        .Range("B6").Value = foundRow.Cells(1, colMap("Projeto")).Value
+        .Range("B10").Value = foundRow.Cells(1, colMap("Cliente")).Value
+        .Range("B14").Value = foundRow.Cells(1, colMap("PM")).Value
+        .Range("B18").Value = foundRow.Cells(1, colMap("PEP")).Value
         
         ' Read column D values
         .Range("D6").Value = foundRow.Cells(1, colMap("Tipo")).Value
@@ -216,9 +218,10 @@ Sub RetrieveDataFromID(Optional ShowOnMacroList As Boolean = False)
         wsForm.OLEObjects("ComboBoxName").Object.Value = foundRow.Cells(1, colMap("ID")) & " - " & foundRow.Cells(1, colMap("PEP")) & " - " & foundRow.Cells(1, colMap("Cliente")) & " - " & foundRow.Cells(1, colMap("Tipo"))
         
         ' Read column B values
-        .Range("B6").Value = foundRow.Cells(1, colMap("Cliente")).Value
-        .Range("B10").Value = foundRow.Cells(1, colMap("PM")).Value
-        .Range("B14").Value = foundRow.Cells(1, colMap("PEP")).Value
+        .Range("B6").Value = foundRow.Cells(1, colMap("Projeto")).Value
+        .Range("B10").Value = foundRow.Cells(1, colMap("Cliente")).Value
+        .Range("B14").Value = foundRow.Cells(1, colMap("PM")).Value
+        .Range("B18").Value = foundRow.Cells(1, colMap("PEP")).Value
         
         ' Read column D values
         .Range("D6").Value = foundRow.Cells(1, colMap("Tipo")).Value
@@ -450,6 +453,7 @@ Sub ClearForm(Optional ShowOnMacroList As Boolean = False)
         .Range("B6").Value = ""
         .Range("B10").Value = ""
         .Range("B14").Value = ""
+        .Range("B18").Value = ""
         
         ' Read column D values
         .Range("D6").Value = ""
@@ -474,17 +478,19 @@ Public Function GetColumnHeadersMapping() As Object
     ' Add each header from the provided table to the dictionary,
     ' mapping it to its column position.
     headers.Add "ID", 1
-    headers.Add "Cliente", 2
-    headers.Add "PM", 3
-    headers.Add "PEP", 4
-    headers.Add "Tipo", 5
-    headers.Add "Valor Total", 6
-    headers.Add "Custo", 7
-    headers.Add "Apolice", 8
-    headers.Add "Percentual", 9
-    headers.Add "Inicio Vigencia", 10
-    headers.Add "Fim Vigencia", 11
-    headers.Add "Status", 12
+    headers.Add "Projeto", 2
+    headers.Add "Cliente", 3
+    headers.Add "PM", 4
+    headers.Add "PEP", 5
+    headers.Add "Tipo", 6
+    headers.Add "Valor Total", 7
+    headers.Add "Custo", 8
+    headers.Add "Apolice", 9
+    headers.Add "Percentual", 10
+    headers.Add "Inicio Vigencia", 11
+    headers.Add "Fim Vigencia", 12
+    headers.Add "Status", 13
+    headers.Add "Solicita��o", 14
     
     Set GetColumnHeadersMapping = headers
 End Function
