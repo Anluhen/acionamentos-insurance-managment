@@ -330,7 +330,7 @@ Sub EnviarParaAprovação(Optional ShowOnMacroList As Boolean = False)
     ' First header row
     HTMLbody = HTMLbody & "<table border='1' style='border-collapse: collapse; font-size: 10pt;'>"
     HTMLbody = HTMLbody & "<tr>"
-    HTMLbody = HTMLbody & "<th scope=""col"" colspan=""4"">NOME DO PROJETO</th>"
+    HTMLbody = HTMLbody & "<th scope=""col"" colspan=""4"">NOME DO CLIENTE</th>"
     HTMLbody = HTMLbody & "<th scope=""col"" colspan=""3"">VALOR TOTAL</th>"
     
     ' Close first header row
@@ -338,7 +338,7 @@ Sub EnviarParaAprovação(Optional ShowOnMacroList As Boolean = False)
     
     ' Data row
     HTMLbody = HTMLbody & "<tr>"
-    HTMLbody = HTMLbody & "<td scope=""col"" colspan=""4"">" & foundRow.Cells(1, colMap("Projeto")).Value & "</td>"
+    HTMLbody = HTMLbody & "<td scope=""col"" colspan=""4"">" & foundRow.Cells(1, colMap("Cliente")).Value & "</td>"
     HTMLbody = HTMLbody & "<td scope=""col"" colspan=""3"">" & Format(foundRow.Cells(1, colMap("Valor Total")).Value, "R$ 0.00") & "</td>"
     HTMLbody = HTMLbody & "</tr>"
     
